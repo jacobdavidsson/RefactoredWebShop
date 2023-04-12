@@ -2,9 +2,11 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace WebShopCleanCode
 {
@@ -34,313 +36,364 @@ namespace WebShopCleanCode
             customers = database.GetCustomers();
         }
 
+        private void DisplayPurchaseMenu()
+        {
+            for (int i = 0; i < amountOfOptions; i++)
+            {
+                Console.WriteLine($"{i + 1}: {products[i].Name}, {products[i].Price}kr");
+            }
+            Console.WriteLine($"Your funds: {currentCustomer.Funds}");
+        }
+        private void DisplayOptions()
+        {
+            Console.WriteLine($"1: {option1}");
+            Console.WriteLine($"2: {option2}");
+            if (amountOfOptions > 2)
+            {
+                Console.WriteLine($"3: {option3}");
+            }
+            if (amountOfOptions > 3)
+            {
+                Console.WriteLine($"4: {option4}");
+            }
+        }
+        private void DisplayButtonOptions()
+        {
+            for (int i = 0; i < amountOfOptions; i++)
+            {
+                Console.Write($"{i + 1}\t");
+            }
+            Console.WriteLine();
+            for (int i = 1; i < currentChoice; i++)
+            {
+                Console.Write("\t");
+            }
+            Console.WriteLine("|");
+            Console.WriteLine("Your buttons are Left, Right, OK, Back and Quit.");
+        }
+        private void DisplayCurrentUser()
+        {
+            if (currentCustomer != null)
+            {
+                Console.WriteLine($"Current user: {currentCustomer.Username}");
+            }
+            else
+            {
+                Console.WriteLine("Nobody logged in.");
+            }
+        }
+        private void MainMenu()
+        {
+            switch (currentChoice)
+            {
+                case 1:
+                    option1 = "See all wares";
+                    option2 = "Purchase a ware";
+                    option3 = "Sort wares";
+                    if (currentCustomer == null)
+                    {
+                        option4 = "Login";
+                    }
+                    else
+                    {
+                        option4 = "Logout";
+                    }
+                    amountOfOptions = 4;
+                    currentChoice = 1;
+                    currentMenu = "wares menu";
+                    info = "What would you like to do?";
+                    break;
+                case 2:
+                    if (currentCustomer != null)
+                    {
+                        option1 = "See your orders";
+                        option2 = "Set your info";
+                        option3 = "Add funds";
+                        option4 = "";
+                        amountOfOptions = 3;
+                        currentChoice = 1;
+                        info = "What would you like to do?";
+                        currentMenu = "customer menu";
+                    }
+                    else
+                    {
+                        Console.WriteLine();
+                        Console.WriteLine("Nobody is logged in.");
+                        Console.WriteLine();
+                    }
+                    break;
+                case 3:
+                    if (currentCustomer == null)
+                    {
+                        option1 = "Set Username";
+                        option2 = "Set Password";
+                        option3 = "Login";
+                        option4 = "Register";
+                        amountOfOptions = 4;
+                        currentChoice = 1;
+                        info = "Please submit username and password.";
+                        username = null;
+                        password = null;
+                        currentMenu = "login menu";
+                    }
+                    else
+                    {
+                        option3 = "Login";
+                        Console.WriteLine();
+                        Console.WriteLine(currentCustomer.Username + " logged out.");
+                        Console.WriteLine();
+                        currentChoice = 1;
+                        currentCustomer = null;
+                    }
+                    break;
+                default:
+                    Console.WriteLine();
+                    Console.WriteLine("Not an option.");
+                    Console.WriteLine();
+                    break;
+            }
+        }
+        private void CustomerMenu()
+        {
+            switch (currentChoice)
+            {
+                case 1:
+                    currentCustomer.PrintOrders();
+                    break;
+                case 2:
+                    currentCustomer.PrintInfo();
+                    break;
+                case 3:
+                    Console.WriteLine("How many funds would you like to add?");
+                    string amountString = Console.ReadLine();
+                    try
+                    {
+                        int amount = int.Parse(amountString);
+                        if (amount < 0)
+                        {
+                            Console.WriteLine();
+                            Console.WriteLine("Don't add negative amounts.");
+                            Console.WriteLine();
+                        }
+                        else
+                        {
+                            currentCustomer.Funds += amount;
+                            Console.WriteLine();
+                            Console.WriteLine(amount + " added to your profile.");
+                            Console.WriteLine();
+                        }
+                    }
+                    catch (FormatException e)
+                    {
+                        Console.WriteLine();
+                        Console.WriteLine("Please write a number next time.");
+                        Console.WriteLine();
+                    }
+                    break;
+                default:
+                    Console.WriteLine();
+                    Console.WriteLine("Not an option.");
+                    Console.WriteLine();
+                    break;
+            }
+        }
+        private void SortMenu()
+        {
+            bool back = true;
+            switch (currentChoice)
+            {
+                case 1:
+                    bubbleSort("name", false);
+                    Console.WriteLine();
+                    Console.WriteLine("Wares sorted.");
+                    Console.WriteLine();
+                    break;
+                case 2:
+                    bubbleSort("name", true);
+                    Console.WriteLine();
+                    Console.WriteLine("Wares sorted.");
+                    Console.WriteLine();
+                    break;
+                case 3:
+                    bubbleSort("price", false);
+                    Console.WriteLine();
+                    Console.WriteLine("Wares sorted.");
+                    Console.WriteLine();
+                    break;
+                case 4:
+                    bubbleSort("price", true);
+                    Console.WriteLine();
+                    Console.WriteLine("Wares sorted.");
+                    Console.WriteLine();
+                    break;
+                default:
+                    back = false;
+                    Console.WriteLine();
+                    Console.WriteLine("Not an option.");
+                    Console.WriteLine();
+                    break;
+            }
+            if (back)
+            {
+                option1 = "See all wares";
+                option2 = "Purchase a ware";
+                option3 = "Sort wares";
+                if (currentCustomer == null)
+                {
+                    option4 = "Login";
+                }
+                else
+                {
+                    option4 = "Logout";
+                }
+                amountOfOptions = 4;
+                currentChoice = 1;
+                currentMenu = "wares menu";
+                info = "What would you like to do?";
+            }
+        }
+        private void WaresMenu()
+        {
+            switch (currentChoice)
+            {
+                case 1:
+                    Console.WriteLine();
+                    foreach (Product product in products)
+                    {
+                        product.PrintInfo();
+                    }
+                    Console.WriteLine();
+                    break;
+                case 2:
+                    if (currentCustomer != null)
+                    {
+                        currentMenu = "purchase menu";
+                        info = "What would you like to purchase?";
+                        currentChoice = 1;
+                        amountOfOptions = products.Count;
+                    }
+                    else
+                    {
+                        Console.WriteLine();
+                        Console.WriteLine("You must be logged in to purchase wares.");
+                        Console.WriteLine();
+                        currentChoice = 1;
+                    }
+                    break;
+                case 3:
+                    option1 = "Sort by name, descending";
+                    option2 = "Sort by name, ascending";
+                    option3 = "Sort by price, descending";
+                    option4 = "Sort by price, ascending";
+                    info = "How would you like to sort them?";
+                    currentMenu = "sort menu";
+                    currentChoice = 1;
+                    amountOfOptions = 4;
+                    break;
+                case 4:
+                    if (currentCustomer == null)
+                    {
+                        option1 = "Set Username";
+                        option2 = "Set Password";
+                        option3 = "Login";
+                        option4 = "Register";
+                        amountOfOptions = 4;
+                        info = "Please submit username and password.";
+                        currentChoice = 1;
+                        currentMenu = "login menu";
+                    }
+                    else
+                    {
+                        option4 = "Login";
+                        Console.WriteLine();
+                        Console.WriteLine(currentCustomer.Username + " logged out.");
+                        Console.WriteLine();
+                        currentCustomer = null;
+                        currentChoice = 1;
+                    }
+                    break;
+                case 5:
+                    break;
+                default:
+                    Console.WriteLine();
+                    Console.WriteLine("Not an option.");
+                    Console.WriteLine();
+                    break;
+            }
+        }
+        private string LogInMenu(string choice)
+        {
+            switch (currentChoice)
+            {
+                case 1:
+                    LogIn();
+                    break;
+                case 2:
+                    Register();
+                    break;
+                default:
+                    Console.WriteLine("Not an option");
+                    break;
+            }
+            return choice;
+        }
+        private void LogIn() 
+        {
+        }
+        private void Register()
+        { 
+        }
+
         public void Run()
         {
             Console.WriteLine("Welcome to the WebShop!");
             while (running)
             {
                 Console.WriteLine(info);
-                
+
                 if (currentMenu.Equals("purchase menu"))
                 {
-                    for (int i = 0; i < amountOfOptions; i++)
-                    {
-                        Console.WriteLine(i + 1 + ": " + products[i].Name + ", " + products[i].Price + "kr");
-                    }
-                    Console.WriteLine("Your funds: " + currentCustomer.Funds);
+                    DisplayPurchaseMenu();
                 }
                 else
                 {
-                    Console.WriteLine("1: " + option1);
-                    Console.WriteLine("2: " + option2);
-                    if (amountOfOptions > 2)
-                    {
-                        Console.WriteLine("3: " + option3);
-                    }
-                    if (amountOfOptions > 3)
-                    {
-                        Console.WriteLine("4: " + option4);
-                    }
+                    DisplayOptions();
                 }
 
-                for (int i = 0; i < amountOfOptions; i++)
-                {
-                    Console.Write(i + 1 + "\t");
-                }
-                Console.WriteLine();
-                for (int i = 1; i < currentChoice; i++)
-                {
-                    Console.Write("\t");
-                }
-                Console.WriteLine("|");
-
-                Console.WriteLine("Your buttons are Left, Right, OK, Back and Quit.");
-                if (currentCustomer != null)
-                {
-                    Console.WriteLine("Current user: " + currentCustomer.Username);
-                }
-                else
-                {
-                    Console.WriteLine("Nobody logged in.");
-                }
+                DisplayButtonOptions();
+                DisplayCurrentUser();
 
                 string choice = Console.ReadLine().ToLower();
                 switch (choice)
                 {
                     case "left":
-                    case "l":
                         if (currentChoice > 1)
                         {
                             currentChoice--;
                         }
                         break;
                     case "right":
-                    case "r":
                         if (currentChoice < amountOfOptions)
                         {
                             currentChoice++;
                         }
                         break;
                     case "ok":
-                    case "k":
-                    case "o":
                         if (currentMenu.Equals("main menu"))
                         {
-                            switch (currentChoice)
-                            {
-                                case 1:
-                                    option1 = "See all wares";
-                                    option2 = "Purchase a ware";
-                                    option3 = "Sort wares";
-                                    if (currentCustomer == null)
-                                    {
-                                        option4 = "Login";
-                                    }
-                                    else
-                                    {
-                                        option4 = "Logout";
-                                    }
-                                    amountOfOptions = 4;
-                                    currentChoice = 1;
-                                    currentMenu = "wares menu";
-                                    info = "What would you like to do?";
-                                    break;
-                                case 2:
-                                    if (currentCustomer != null)
-                                    {
-                                        option1 = "See your orders";
-                                        option2 = "Set your info";
-                                        option3 = "Add funds";
-                                        option4 = "";
-                                        amountOfOptions = 3;
-                                        currentChoice = 1;
-                                        info = "What would you like to do?";
-                                        currentMenu = "customer menu";
-                                    }
-                                    else
-                                    {
-                                        Console.WriteLine();
-                                        Console.WriteLine("Nobody is logged in.");
-                                        Console.WriteLine();
-                                    }
-                                    break;
-                                case 3:
-                                    if (currentCustomer == null)
-                                    {
-                                        option1 = "Set Username";
-                                        option2 = "Set Password";
-                                        option3 = "Login";
-                                        option4 = "Register";
-                                        amountOfOptions = 4;
-                                        currentChoice = 1;
-                                        info = "Please submit username and password.";
-                                        username = null;
-                                        password = null;
-                                        currentMenu = "login menu";
-                                    }
-                                    else
-                                    {
-                                        option3 = "Login";
-                                        Console.WriteLine();
-                                        Console.WriteLine(currentCustomer.Username + " logged out.");
-                                        Console.WriteLine();
-                                        currentChoice = 1;
-                                        currentCustomer = null;
-                                    }
-                                    break;
-                                default:
-                                    Console.WriteLine();
-                                    Console.WriteLine("Not an option.");
-                                    Console.WriteLine();
-                                    break;
-                            }
+                            MainMenu();
                         }
-                        else if (currentMenu.Equals("customer menu")) {
-                            switch (currentChoice)
-                            {
-                                case 1:
-                                    currentCustomer.PrintOrders();
-                                    break;
-                                case 2:
-                                    currentCustomer.PrintInfo();
-                                    break;
-                                case 3:
-                                    Console.WriteLine("How many funds would you like to add?");
-                                    string amountString = Console.ReadLine();
-                                    try
-                                    {
-                                        int amount = int.Parse(amountString);
-                                        if (amount < 0)
-                                        {
-                                            Console.WriteLine();
-                                            Console.WriteLine("Don't add negative amounts.");
-                                            Console.WriteLine();
-                                        }
-                                        else
-                                        {
-                                            currentCustomer.Funds += amount;
-                                            Console.WriteLine();
-                                            Console.WriteLine(amount + " added to your profile.");
-                                            Console.WriteLine();
-                                        }
-                                    }
-                                    catch (FormatException e)
-                                    {
-                                        Console.WriteLine();
-                                        Console.WriteLine("Please write a number next time.");
-                                        Console.WriteLine();
-                                    }
-                                    break;
-                                default:
-                                    Console.WriteLine();
-                                    Console.WriteLine("Not an option.");
-                                    Console.WriteLine();
-                                    break;
-                            }
+                        else if (currentMenu.Equals("customer menu"))
+                        {
+                            CustomerMenu();
                         }
                         else if (currentMenu.Equals("sort menu"))
                         {
-                            bool back = true;
-                            switch (currentChoice)
-                            {
-                                case 1:
-                                    bubbleSort("name", false);
-                                    Console.WriteLine();
-                                    Console.WriteLine("Wares sorted.");
-                                    Console.WriteLine();
-                                    break;
-                                case 2:
-                                    bubbleSort("name", true);
-                                    Console.WriteLine();
-                                    Console.WriteLine("Wares sorted.");
-                                    Console.WriteLine();
-                                    break;
-                                case 3:
-                                    bubbleSort("price", false);
-                                    Console.WriteLine();
-                                    Console.WriteLine("Wares sorted.");
-                                    Console.WriteLine();
-                                    break;
-                                case 4:
-                                    bubbleSort("price", true);
-                                    Console.WriteLine();
-                                    Console.WriteLine("Wares sorted.");
-                                    Console.WriteLine();
-                                    break;
-                                default:
-                                    back = false;
-                                    Console.WriteLine();
-                                    Console.WriteLine("Not an option.");
-                                    Console.WriteLine();
-                                    break;
-                            }
-                            if (back)
-                            {
-                                option1 = "See all wares";
-                                option2 = "Purchase a ware";
-                                option3 = "Sort wares";
-                                if (currentCustomer == null)
-                                {
-                                    option4 = "Login";
-                                }
-                                else
-                                {
-                                    option4 = "Logout";
-                                }
-                                amountOfOptions = 4;
-                                currentChoice = 1;
-                                currentMenu = "wares menu";
-                                info = "What would you like to do?";
-                            }
+                            SortMenu();
                         }
                         else if (currentMenu.Equals("wares menu"))
                         {
-                            switch (currentChoice)
-                            {
-                                case 1:
-                                    Console.WriteLine();
-                                    foreach (Product product in products)
-                                    {
-                                        product.PrintInfo();
-                                    }
-                                    Console.WriteLine();
-                                    break;
-                                case 2:
-                                    if (currentCustomer != null)
-                                    {
-                                        currentMenu = "purchase menu";
-                                        info = "What would you like to purchase?";
-                                        currentChoice = 1;
-                                        amountOfOptions = products.Count;
-                                    }
-                                    else
-                                    {
-                                        Console.WriteLine();
-                                        Console.WriteLine("You must be logged in to purchase wares.");
-                                        Console.WriteLine();
-                                        currentChoice = 1;
-                                    }
-                                    break;
-                                case 3:
-                                    option1 = "Sort by name, descending";
-                                    option2 = "Sort by name, ascending";
-                                    option3 = "Sort by price, descending";
-                                    option4 = "Sort by price, ascending";
-                                    info = "How would you like to sort them?";
-                                    currentMenu = "sort menu";
-                                    currentChoice = 1;
-                                    amountOfOptions = 4;
-                                    break;
-                                case 4:
-                                    if (currentCustomer == null)
-                                    {
-                                        option1 = "Set Username";
-                                        option2 = "Set Password";
-                                        option3 = "Login";
-                                        option4 = "Register";
-                                        amountOfOptions = 4;
-                                        info = "Please submit username and password.";
-                                        currentChoice = 1;
-                                        currentMenu = "login menu";
-                                    }
-                                    else
-                                    {
-                                        option4 = "Login";
-                                        Console.WriteLine();
-                                        Console.WriteLine(currentCustomer.Username + " logged out.");
-                                        Console.WriteLine();
-                                        currentCustomer = null;
-                                        currentChoice = 1;
-                                    }
-                                    break;
-                                case 5:
-                                    break;
-                                default:
-                                    Console.WriteLine();
-                                    Console.WriteLine("Not an option.");
-                                    Console.WriteLine();
-                                    break;
-                            }
+                            WaresMenu();
                         }
                         else if (currentMenu.Equals("login menu"))
                         {
@@ -425,6 +478,7 @@ namespace WebShopCleanCode
                                     int age = -1;
                                     string address = null;
                                     string phoneNumber = null;
+
                                     while (true)
                                     {
                                         Console.WriteLine("Do you want a password? y/n");
@@ -716,7 +770,6 @@ namespace WebShopCleanCode
                         }
                         break;
                     case "back":
-                    case "b":
                         if (currentMenu.Equals("main menu"))
                         {
                             Console.WriteLine();
@@ -760,7 +813,6 @@ namespace WebShopCleanCode
                         }
                         break;
                     case "quit":
-                    case "q":
                         Console.WriteLine("The console powers down. You are free to leave.");
                         return;
                     default:
