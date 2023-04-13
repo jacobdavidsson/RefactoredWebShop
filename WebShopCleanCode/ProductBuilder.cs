@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace WebShopCleanCode
 {
+    //Builder design pattern
     public class ProductBuilder
     {
         private string _name;

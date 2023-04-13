@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,7 +13,11 @@ namespace WebShopCleanCode
         private List<Product> productsInDatabase;
         private List<Customer> customersInDatabase;
 
-        public Database()
+        // Singleton design pattern
+        // We only want one instance of the database.
+        private static Database instance;
+
+        private Database()
         {
             productsInDatabase = new List<Product>();
 
@@ -41,6 +46,15 @@ namespace WebShopCleanCode
             customersInDatabase = new List<Customer>();
             customersInDatabase.Add(new Customer("jimmy", "jimisthebest", "Jimmy", "Jamesson", "jj@mail.com", 22, "Big Street 5", "123456789"));
             customersInDatabase.Add(new Customer("jake", "jake123", "Jake", null, null, 0, null, null));
+        }
+
+        public static Database GetInstance()
+        {
+            if (instance == null)
+            {
+                instance = new Database();
+            }
+            return instance;
         }
 
         public List<Product> GetProducts()

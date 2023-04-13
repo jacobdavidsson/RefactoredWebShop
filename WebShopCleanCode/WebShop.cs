@@ -13,7 +13,7 @@ namespace WebShopCleanCode
     public class WebShop
     {
         bool running = true;
-        Database database = new Database();
+        Database database = Database.GetInstance();
         List<Product> products = new List<Product>();
         List<Customer> customers = new List<Customer>();
 
