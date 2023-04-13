@@ -11,18 +11,32 @@ namespace WebShopCleanCode
         // We just pretend this accesses a real database.
         private List<Product> productsInDatabase;
         private List<Customer> customersInDatabase;
+
         public Database()
         {
             productsInDatabase = new List<Product>();
-            productsInDatabase.Add(new Product("Mirror", 300, 2));
-            productsInDatabase.Add(new Product("Car", 2000000, 2));
-            productsInDatabase.Add(new Product("Candle", 50, 2));
-            productsInDatabase.Add(new Product("Computer", 100000, 2));
-            productsInDatabase.Add(new Product("Game", 599, 2));
-            productsInDatabase.Add(new Product("Painting", 399, 2));
-            productsInDatabase.Add(new Product("Chair", 500, 2));
-            productsInDatabase.Add(new Product("Table", 1000, 2));
-            productsInDatabase.Add(new Product("Bed", 20000, 2));
+
+            var builder = new ProductBuilder();
+
+            var product1 = builder.WithName("Mirror").WithPrice(300).WithNrInStock(2).Build();
+            var product2 = builder.WithName("Car").WithPrice(2000000).WithNrInStock(2).Build();
+            var product3 = builder.WithName("Candle").WithPrice(50).WithNrInStock(2).Build();
+            var product4 = builder.WithName("Computer").WithPrice(100000).WithNrInStock(2).Build();
+            var product5 = builder.WithName("Game").WithPrice(599).WithNrInStock(2).Build();
+            var product6 = builder.WithName("Painting").WithPrice(399).WithNrInStock(2).Build();
+            var product7 = builder.WithName("Chair").WithPrice(500).WithNrInStock(2).Build();
+            var product8 = builder.WithName("Table").WithPrice(1000).WithNrInStock(2).Build();
+            var product9 = builder.WithName("Bed").WithPrice(20000).WithNrInStock(2).Build();
+
+            productsInDatabase.Add(product1);
+            productsInDatabase.Add(product2);
+            productsInDatabase.Add(product3);
+            productsInDatabase.Add(product4);
+            productsInDatabase.Add(product5);
+            productsInDatabase.Add(product6);
+            productsInDatabase.Add(product7);
+            productsInDatabase.Add(product8);
+            productsInDatabase.Add(product9);
 
             customersInDatabase = new List<Customer>();
             customersInDatabase.Add(new Customer("jimmy", "jimisthebest", "Jimmy", "Jamesson", "jj@mail.com", 22, "Big Street 5", "123456789"));
