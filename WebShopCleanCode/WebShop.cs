@@ -36,6 +36,19 @@ namespace WebShopCleanCode
             customers = database.GetCustomers();
         }
 
+        private void TextOutput(string text)
+        {
+            Console.WriteLine();
+            Console.WriteLine(text);
+            Console.WriteLine();
+        } //Klar
+        private void Sort(string type, bool sorted) 
+        {
+            bubbleSort(type, sorted);
+            Console.WriteLine();
+            Console.WriteLine("Wares sorted.");
+            Console.WriteLine();
+        } //Klar
         private void DisplayItems()
         {
             for (int i = 0; i < amountOfOptions; i++)
@@ -43,7 +56,7 @@ namespace WebShopCleanCode
                 Console.WriteLine($"{i + 1}: {products[i].Name}, {products[i].Price}kr");
             }
             Console.WriteLine($"Your funds: {currentCustomer.Funds}");
-        }
+        } //Klar
         private void DisplayOptions()
         {
             Console.WriteLine($"1: {option1}");
@@ -56,7 +69,7 @@ namespace WebShopCleanCode
             {
                 Console.WriteLine($"4: {option4}");
             }
-        }
+        } //Klar
         private void DisplayButtonOptions()
         {
             for (int i = 0; i < amountOfOptions; i++)
@@ -70,7 +83,7 @@ namespace WebShopCleanCode
             }
             Console.WriteLine("|");
             Console.WriteLine("Your buttons are Left, Right, OK, Back and Quit.");
-        }
+        } //Klar
         private void DisplayCurrentUser()
         {
             if (currentCustomer != null)
@@ -81,27 +94,31 @@ namespace WebShopCleanCode
             {
                 Console.WriteLine("Nobody logged in.");
             }
-        }
+        } //Klar
+        private void WaresMenu() 
+        {
+            option1 = "See all wares";
+            option2 = "Purchase a ware";
+            option3 = "Sort wares";
+            if (currentCustomer == null)
+            {
+                option4 = "Login";
+            }
+            else
+            {
+                option4 = "Logout";
+            }
+            amountOfOptions = 4;
+            currentChoice = 1;
+            currentMenu = "wares menu";
+            info = "What would you like to do?";
+        } //Klar
         private void MainMenu()
         {
             switch (currentChoice)
             {
                 case 1:
-                    option1 = "See all wares";
-                    option2 = "Purchase a ware";
-                    option3 = "Sort wares";
-                    if (currentCustomer == null)
-                    {
-                        option4 = "Login";
-                    }
-                    else
-                    {
-                        option4 = "Logout";
-                    }
-                    amountOfOptions = 4;
-                    currentChoice = 1;
-                    currentMenu = "wares menu";
-                    info = "What would you like to do?";
+                    WaresMenu();
                     break;
                 case 2:
                     if (currentCustomer != null)
@@ -117,9 +134,7 @@ namespace WebShopCleanCode
                     }
                     else
                     {
-                        Console.WriteLine();
-                        Console.WriteLine("Nobody is logged in.");
-                        Console.WriteLine();
+                        TextOutput("Nobody is logged in");
                     }
                     break;
                 case 3:
@@ -139,17 +154,13 @@ namespace WebShopCleanCode
                     else
                     {
                         option3 = "Login";
-                        Console.WriteLine();
-                        Console.WriteLine(currentCustomer.Username + " logged out.");
-                        Console.WriteLine();
+                        TextOutput($"{currentCustomer.Username} logged out.");
                         currentChoice = 1;
                         currentCustomer = null;
                     }
                     break;
                 default:
-                    Console.WriteLine();
-                    Console.WriteLine("Not an option.");
-                    Console.WriteLine();
+                    TextOutput("Not an option");
                     break;
             }
         }
@@ -171,29 +182,21 @@ namespace WebShopCleanCode
                         int amount = int.Parse(amountString);
                         if (amount < 0)
                         {
-                            Console.WriteLine();
-                            Console.WriteLine("Don't add negative amounts.");
-                            Console.WriteLine();
+                            TextOutput("Don't add negative amounts");
                         }
                         else
                         {
                             currentCustomer.Funds += amount;
-                            Console.WriteLine();
-                            Console.WriteLine(amount + " added to your profile.");
-                            Console.WriteLine();
+                            TextOutput($"{amount} added to your profile.");
                         }
                     }
                     catch (FormatException e)
                     {
-                        Console.WriteLine();
-                        Console.WriteLine("Please write a number next time.");
-                        Console.WriteLine();
+                        TextOutput("Please write a number next time.");
                     }
                     break;
                 default:
-                    Console.WriteLine();
-                    Console.WriteLine("Not an option.");
-                    Console.WriteLine();
+                    TextOutput("Not an option.");
                     break;
             }
         }
@@ -203,56 +206,28 @@ namespace WebShopCleanCode
             switch (currentChoice)
             {
                 case 1:
-                    bubbleSort("name", false);
-                    Console.WriteLine();
-                    Console.WriteLine("Wares sorted.");
-                    Console.WriteLine();
+                    Sort("name", false);
                     break;
                 case 2:
-                    bubbleSort("name", true);
-                    Console.WriteLine();
-                    Console.WriteLine("Wares sorted.");
-                    Console.WriteLine();
+                    Sort("name", true);
                     break;
                 case 3:
-                    bubbleSort("price", false);
-                    Console.WriteLine();
-                    Console.WriteLine("Wares sorted.");
-                    Console.WriteLine();
+                    Sort("price", false);
                     break;
                 case 4:
-                    bubbleSort("price", true);
-                    Console.WriteLine();
-                    Console.WriteLine("Wares sorted.");
-                    Console.WriteLine();
+                    Sort("price", true);
                     break;
                 default:
                     back = false;
-                    Console.WriteLine();
-                    Console.WriteLine("Not an option.");
-                    Console.WriteLine();
+                    TextOutput("Not an option");
                     break;
             }
             if (back)
             {
-                option1 = "See all wares";
-                option2 = "Purchase a ware";
-                option3 = "Sort wares";
-                if (currentCustomer == null)
-                {
-                    option4 = "Login";
-                }
-                else
-                {
-                    option4 = "Logout";
-                }
-                amountOfOptions = 4;
-                currentChoice = 1;
-                currentMenu = "wares menu";
-                info = "What would you like to do?";
+                WaresMenu();
             }
         }
-        private void WaresMenu()
+        private void PurchaseWaresMenu()
         {
             switch (currentChoice)
             {
@@ -274,9 +249,7 @@ namespace WebShopCleanCode
                     }
                     else
                     {
-                        Console.WriteLine();
-                        Console.WriteLine("You must be logged in to purchase wares.");
-                        Console.WriteLine();
+                        TextOutput("You must be logged in to purchase wares");
                         currentChoice = 1;
                     }
                     break;
@@ -305,9 +278,7 @@ namespace WebShopCleanCode
                     else
                     {
                         option4 = "Login";
-                        Console.WriteLine();
-                        Console.WriteLine(currentCustomer.Username + " logged out.");
-                        Console.WriteLine();
+                        TextOutput($"{currentCustomer.Username} logged out");
                         currentCustomer = null;
                         currentChoice = 1;
                     }
@@ -315,9 +286,7 @@ namespace WebShopCleanCode
                 case 5:
                     break;
                 default:
-                    Console.WriteLine();
-                    Console.WriteLine("Not an option.");
-                    Console.WriteLine();
+                    TextOutput("Not an option.");
                     break;
             }
         }
@@ -338,7 +307,7 @@ namespace WebShopCleanCode
                     Register();
                     break;
                 default:
-                    Console.WriteLine("Not an option");
+                    TextOutput("Not an option");
                     break;
             }
         }
@@ -346,9 +315,7 @@ namespace WebShopCleanCode
         {
             if (username == null || password == null)
             {
-                Console.WriteLine();
-                Console.WriteLine("Incomplete data.");
-                Console.WriteLine();
+                TextOutput("Incomplete data");
             }
             else
             {
@@ -357,9 +324,7 @@ namespace WebShopCleanCode
                 {
                     if (username.Equals(customer.Username) && customer.CheckPassword(password))
                     {
-                        Console.WriteLine();
-                        Console.WriteLine(customer.Username + " logged in.");
-                        Console.WriteLine();
+                        TextOutput($"{customer.Username} logged in.");
                         currentCustomer = customer;
                         found = true;
                         option1 = "See Wares";
@@ -381,9 +346,7 @@ namespace WebShopCleanCode
                 }
                 if (found == false)
                 {
-                    Console.WriteLine();
-                    Console.WriteLine("Invalid credentials.");
-                    Console.WriteLine();
+                    TextOutput("Invalid credentials");
                 }
             }
         }
@@ -395,9 +358,7 @@ namespace WebShopCleanCode
             {
                 if (customer.Username.Equals(username))
                 {
-                    Console.WriteLine();
-                    Console.WriteLine("Username already exists.");
-                    Console.WriteLine();
+                    TextOutput("Username already exists");
                     break;
                 }
             }
@@ -424,9 +385,7 @@ namespace WebShopCleanCode
                         newPassword = Console.ReadLine();
                         if (newPassword.Equals(""))
                         {
-                            Console.WriteLine();
-                            Console.WriteLine("Please actually write something.");
-                            Console.WriteLine();
+                            TextOutput("Please actually write something.");
                             continue;
                         }
                         else
@@ -441,9 +400,7 @@ namespace WebShopCleanCode
                     next = false;
                     break;
                 }
-                Console.WriteLine();
-                Console.WriteLine("y or n, please.");
-                Console.WriteLine();
+                TextOutput("y or n, please");
             }
             while (true)
             {
@@ -457,9 +414,7 @@ namespace WebShopCleanCode
                         firstName = Console.ReadLine();
                         if (firstName.Equals(""))
                         {
-                            Console.WriteLine();
-                            Console.WriteLine("Please actually write something.");
-                            Console.WriteLine();
+                            TextOutput("Please actually write something");
                             continue;
                         }
                         else
@@ -474,9 +429,7 @@ namespace WebShopCleanCode
                     next = false;
                     break;
                 }
-                Console.WriteLine();
-                Console.WriteLine("y or n, please.");
-                Console.WriteLine();
+                TextOutput("y or n, please.");
             }
             while (true)
             {
@@ -490,9 +443,7 @@ namespace WebShopCleanCode
                         lastName = Console.ReadLine();
                         if (lastName.Equals(""))
                         {
-                            Console.WriteLine();
-                            Console.WriteLine("Please actually write something.");
-                            Console.WriteLine();
+                            TextOutput("Please actually write something.");
                             continue;
                         }
                         else
@@ -507,9 +458,7 @@ namespace WebShopCleanCode
                     next = false;
                     break;
                 }
-                Console.WriteLine();
-                Console.WriteLine("y or n, please.");
-                Console.WriteLine();
+                TextOutput("y or n, please");
             }
             while (true)
             {
@@ -523,9 +472,7 @@ namespace WebShopCleanCode
                         email = Console.ReadLine();
                         if (email.Equals(""))
                         {
-                            Console.WriteLine();
-                            Console.WriteLine("Please actually write something.");
-                            Console.WriteLine();
+                            TextOutput("Please actually write something");
                             continue;
                         }
                         else
@@ -540,9 +487,7 @@ namespace WebShopCleanCode
                     next = false;
                     break;
                 }
-                Console.WriteLine();
-                Console.WriteLine("y or n, please.");
-                Console.WriteLine();
+                TextOutput("y or n, please.");
             }
             while (true)
             {
@@ -560,9 +505,7 @@ namespace WebShopCleanCode
                         }
                         catch (FormatException e)
                         {
-                            Console.WriteLine();
-                            Console.WriteLine("Please write a number.");
-                            Console.WriteLine();
+                            TextOutput("Please write a number.");
                             continue;
                         }
                         next = true;
@@ -574,9 +517,7 @@ namespace WebShopCleanCode
                     next = false;
                     break;
                 }
-                Console.WriteLine();
-                Console.WriteLine("y or n, please.");
-                Console.WriteLine();
+                TextOutput("y or n, please");
             }
             while (true)
             {
@@ -590,9 +531,7 @@ namespace WebShopCleanCode
                         address = Console.ReadLine();
                         if (address.Equals(""))
                         {
-                            Console.WriteLine();
-                            Console.WriteLine("Please actually write something.");
-                            Console.WriteLine();
+                            TextOutput("Please actually write something.");
                             continue;
                         }
                         else
@@ -607,9 +546,7 @@ namespace WebShopCleanCode
                     next = false;
                     break;
                 }
-                Console.WriteLine();
-                Console.WriteLine("y or n, please.");
-                Console.WriteLine();
+                TextOutput("y or n, please.");
             }
             while (true)
             {
@@ -623,9 +560,7 @@ namespace WebShopCleanCode
                         phoneNumber = Console.ReadLine();
                         if (phoneNumber.Equals(""))
                         {
-                            Console.WriteLine();
-                            Console.WriteLine("Please actually write something.");
-                            Console.WriteLine();
+                            TextOutput("Please actually write something.");
                             continue;
                         }
                         else
@@ -639,17 +574,13 @@ namespace WebShopCleanCode
                 {
                     break;
                 }
-                Console.WriteLine();
-                Console.WriteLine("y or n, please.");
-                Console.WriteLine();
+                TextOutput("y or n, please");
             }
 
             Customer newCustomer = new Customer(newUsername, newPassword, firstName, lastName, email, age, address, phoneNumber);
             customers.Add(newCustomer);
             currentCustomer = newCustomer;
-            Console.WriteLine();
-            Console.WriteLine(newCustomer.Username + " successfully added and is now logged in.");
-            Console.WriteLine();
+            TextOutput($"{newCustomer.Username} successfully added and is now logged in.");
             option1 = "See Wares";
             option2 = "Customer Info";
             if (currentCustomer == null)
@@ -683,9 +614,7 @@ namespace WebShopCleanCode
         {
             if (currentMenu.Equals("main menu"))
             {
-                Console.WriteLine();
-                Console.WriteLine("You're already on the main menu.");
-                Console.WriteLine();
+                TextOutput("You're already on the main menu.");
             }
             else if (currentMenu.Equals("purchase menu"))
             {
@@ -734,22 +663,16 @@ namespace WebShopCleanCode
                     currentCustomer.Funds -= product.Price;
                     product.NrInStock--;
                     currentCustomer.Orders.Add(new Order(product.Name, product.Price, DateTime.Now));
-                    Console.WriteLine();
-                    Console.WriteLine("Successfully bought " + product.Name);
-                    Console.WriteLine();
+                    TextOutput($"Successfully bought {product.Name}");
                 }
                 else
                 {
-                    Console.WriteLine();
-                    Console.WriteLine("You cannot afford.");
-                    Console.WriteLine();
+                    TextOutput("You cannot afford.");
                 }
             }
             else
             {
-                Console.WriteLine();
-                Console.WriteLine("Not in stock.");
-                Console.WriteLine();
+                TextOutput("Not in stock.");
             }
         }
 
@@ -802,7 +725,7 @@ namespace WebShopCleanCode
                         }
                         else if (currentMenu.Equals("wares menu"))
                         {
-                            WaresMenu();
+                            PurchaseWaresMenu();
                         }
                         else if (currentMenu.Equals("login menu"))
                         {
@@ -898,6 +821,6 @@ namespace WebShopCleanCode
                     }
                 }
             }
-        }
+        } //Klar
     }
 }
