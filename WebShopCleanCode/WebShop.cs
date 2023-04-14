@@ -36,19 +36,30 @@ namespace WebShopCleanCode
             customers = database.GetCustomers();
         }
 
+        private void LoginMenuOptions()
+        {
+            option1 = "Set Username";
+            option2 = "Set Password";
+            option3 = "Login";
+            option4 = "Register";
+            amountOfOptions = 4;
+            info = "Please submit username and password.";
+            currentChoice = 1;
+            currentMenu = "login menu";
+        }
         private void TextOutput(string text)
         {
             Console.WriteLine();
             Console.WriteLine(text);
             Console.WriteLine();
-        } //Klar
+        }
         private void Sort(string type, bool sorted) 
         {
             bubbleSort(type, sorted);
             Console.WriteLine();
             Console.WriteLine("Wares sorted.");
             Console.WriteLine();
-        } //Klar
+        }
         private void DisplayItems()
         {
             for (int i = 0; i < amountOfOptions; i++)
@@ -56,7 +67,7 @@ namespace WebShopCleanCode
                 Console.WriteLine($"{i + 1}: {products[i].Name}, {products[i].Price}kr");
             }
             Console.WriteLine($"Your funds: {currentCustomer.Funds}");
-        } //Klar
+        }
         private void DisplayOptions()
         {
             Console.WriteLine($"1: {option1}");
@@ -69,7 +80,7 @@ namespace WebShopCleanCode
             {
                 Console.WriteLine($"4: {option4}");
             }
-        } //Klar
+        }
         private void DisplayButtonOptions()
         {
             for (int i = 0; i < amountOfOptions; i++)
@@ -83,7 +94,7 @@ namespace WebShopCleanCode
             }
             Console.WriteLine("|");
             Console.WriteLine("Your buttons are Left, Right, OK, Back and Quit.");
-        } //Klar
+        }
         private void DisplayCurrentUser()
         {
             if (currentCustomer != null)
@@ -94,7 +105,7 @@ namespace WebShopCleanCode
             {
                 Console.WriteLine("Nobody logged in.");
             }
-        } //Klar
+        }
         private void WaresMenu() 
         {
             option1 = "See all wares";
@@ -112,7 +123,24 @@ namespace WebShopCleanCode
             currentChoice = 1;
             currentMenu = "wares menu";
             info = "What would you like to do?";
-        } //Klar
+        }
+        private void WaresMenuLoggedIn()
+        {
+            option1 = "See Wares";
+            option2 = "Customer Info";
+            if (currentCustomer == null)
+            {
+                option3 = "Login";
+            }
+            else
+            {
+                option3 = "Logout";
+            }
+            info = "What would you like to do?";
+            currentMenu = "main menu";
+            currentChoice = 1;
+            amountOfOptions = 3;
+        }
         private void MainMenu()
         {
             switch (currentChoice)
@@ -140,16 +168,9 @@ namespace WebShopCleanCode
                 case 3:
                     if (currentCustomer == null)
                     {
-                        option1 = "Set Username";
-                        option2 = "Set Password";
-                        option3 = "Login";
-                        option4 = "Register";
-                        amountOfOptions = 4;
-                        currentChoice = 1;
-                        info = "Please submit username and password.";
                         username = null;
                         password = null;
-                        currentMenu = "login menu";
+                        LoginMenuOptions();
                     }
                     else
                     {
@@ -266,14 +287,7 @@ namespace WebShopCleanCode
                 case 4:
                     if (currentCustomer == null)
                     {
-                        option1 = "Set Username";
-                        option2 = "Set Password";
-                        option3 = "Login";
-                        option4 = "Register";
-                        amountOfOptions = 4;
-                        info = "Please submit username and password.";
-                        currentChoice = 1;
-                        currentMenu = "login menu";
+                        LoginMenuOptions();
                     }
                     else
                     {
@@ -327,20 +341,7 @@ namespace WebShopCleanCode
                         TextOutput($"{customer.Username} logged in.");
                         currentCustomer = customer;
                         found = true;
-                        option1 = "See Wares";
-                        option2 = "Customer Info";
-                        if (currentCustomer == null)
-                        {
-                            option3 = "Login";
-                        }
-                        else
-                        {
-                            option3 = "Logout";
-                        }
-                        info = "What would you like to do?";
-                        currentMenu = "main menu";
-                        currentChoice = 1;
-                        amountOfOptions = 3;
+                        WaresMenuLoggedIn();
                         break;
                     }
                 }
@@ -581,21 +582,8 @@ namespace WebShopCleanCode
             customers.Add(newCustomer);
             currentCustomer = newCustomer;
             TextOutput($"{newCustomer.Username} successfully added and is now logged in.");
-            option1 = "See Wares";
-            option2 = "Customer Info";
-            if (currentCustomer == null)
-            {
-                option3 = "Login";
-            }
-            else
-            {
-                option3 = "Logout";
-            }
-            info = "What would you like to do?";
-            currentMenu = "main menu";
-            currentChoice = 1;
-            amountOfOptions = 3;
-        }
+            WaresMenuLoggedIn();
+        } //TO DO!
         private void SetUserName()
         {
             Console.WriteLine("A keyboard appears.");
@@ -618,38 +606,11 @@ namespace WebShopCleanCode
             }
             else if (currentMenu.Equals("purchase menu"))
             {
-                option1 = "See all wares";
-                option2 = "Purchase a ware";
-                option3 = "Sort wares";
-                if (currentCustomer == null)
-                {
-                    option4 = "Login";
-                }
-                else
-                {
-                    option4 = "Logout";
-                }
-                amountOfOptions = 4;
-                currentChoice = 1;
-                currentMenu = "wares menu";
-                info = "What would you like to do?";
+                WaresMenu();
             }
             else
             {
-                option1 = "See Wares";
-                option2 = "Customer Info";
-                if (currentCustomer == null)
-                {
-                    option3 = "Login";
-                }
-                else
-                {
-                    option3 = "Logout";
-                }
-                info = "What would you like to do?";
-                currentMenu = "main menu";
-                currentChoice = 1;
-                amountOfOptions = 3;
+                WaresMenuLoggedIn();
             }
         }
         private void BuyItems()
@@ -821,6 +782,6 @@ namespace WebShopCleanCode
                     }
                 }
             }
-        } //Klar
+        }
     }
 }
