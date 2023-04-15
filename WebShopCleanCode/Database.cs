@@ -44,8 +44,8 @@ namespace WebShopCleanCode
             productsInDatabase.Add(product9);
 
             customersInDatabase = new List<Customer>();
-            customersInDatabase.Add(new Customer("jimmy", "jimisthebest", "Jimmy", "Jamesson", "jj@mail.com", 22, "Big Street 5", "123456789"));
-            customersInDatabase.Add(new Customer("jake", "jake123", "Jake", null, null, 0, null, null));
+            customersInDatabase.Add(new Customer("jimmy", "jimisthebest", "Jimmy", "Jamesson", "jj@mail.com", "22", "Big Street 5", "123456789"));
+            customersInDatabase.Add(new Customer("jake", "jake123", "Jake", null, null, "0", null, null));
         }
 
         public static Database GetInstance()

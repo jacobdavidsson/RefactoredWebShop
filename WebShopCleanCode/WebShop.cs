@@ -36,6 +36,43 @@ namespace WebShopCleanCode
             customers = database.GetCustomers();
         }
 
+        private string UserDetailsInput(string value)
+        {
+            string choice = "";
+            bool next = false;
+            string newValue = null;
+
+            while (true)
+            {
+                Console.WriteLine($"Do you want a {value}? y/n");
+                choice = Console.ReadLine();
+                if (choice.Equals("y"))
+                {
+                    while (true)
+                    {
+                        Console.WriteLine($"Please write your {value}.");
+                        newValue = Console.ReadLine();
+                        if (newValue.Equals(""))
+                        {
+                            TextOutput("Please actually write something");
+                            continue;
+                        }
+                        else
+                        {
+                            next = true;
+                            break;
+                        }
+                    }
+                }
+                if (choice.Equals("n") || next)
+                {
+                    next = false;
+                    break;
+                }
+                TextOutput("y or n, please.");
+            }
+            return newValue;
+        }
         private void LoginMenuOptions()
         {
             option1 = "Set Username";
@@ -363,227 +400,29 @@ namespace WebShopCleanCode
                     break;
                 }
             }
-            // Would have liked to be able to quit at any time in here.
-            string choice = "";
-            bool next = false;
-            string newPassword = null;
-            string firstName = null;
-            string lastName = null;
-            string email = null;
-            int age = -1;
-            string address = null;
-            string phoneNumber = null;
 
-            while (true)
-            {
-                Console.WriteLine("Do you want a password? y/n");
-                choice = Console.ReadLine();
-                if (choice.Equals("y"))
-                {
-                    while (true)
-                    {
-                        Console.WriteLine("Please write your password.");
-                        newPassword = Console.ReadLine();
-                        if (newPassword.Equals(""))
-                        {
-                            TextOutput("Please actually write something.");
-                            continue;
-                        }
-                        else
-                        {
-                            next = true;
-                            break;
-                        }
-                    }
-                }
-                if (choice.Equals("n") || next)
-                {
-                    next = false;
-                    break;
-                }
-                TextOutput("y or n, please");
-            }
-            while (true)
-            {
-                Console.WriteLine("Do you want a first name? y/n");
-                choice = Console.ReadLine();
-                if (choice.Equals("y"))
-                {
-                    while (true)
-                    {
-                        Console.WriteLine("Please write your first name.");
-                        firstName = Console.ReadLine();
-                        if (firstName.Equals(""))
-                        {
-                            TextOutput("Please actually write something");
-                            continue;
-                        }
-                        else
-                        {
-                            next = true;
-                            break;
-                        }
-                    }
-                }
-                if (choice.Equals("n") || next)
-                {
-                    next = false;
-                    break;
-                }
-                TextOutput("y or n, please.");
-            }
-            while (true)
-            {
-                Console.WriteLine("Do you want a last name? y/n");
-                choice = Console.ReadLine();
-                if (choice.Equals("y"))
-                {
-                    while (true)
-                    {
-                        Console.WriteLine("Please write your last name.");
-                        lastName = Console.ReadLine();
-                        if (lastName.Equals(""))
-                        {
-                            TextOutput("Please actually write something.");
-                            continue;
-                        }
-                        else
-                        {
-                            next = true;
-                            break;
-                        }
-                    }
-                }
-                if (choice.Equals("n") || next)
-                {
-                    next = false;
-                    break;
-                }
-                TextOutput("y or n, please");
-            }
-            while (true)
-            {
-                Console.WriteLine("Do you want an email? y/n");
-                choice = Console.ReadLine();
-                if (choice.Equals("y"))
-                {
-                    while (true)
-                    {
-                        Console.WriteLine("Please write your email.");
-                        email = Console.ReadLine();
-                        if (email.Equals(""))
-                        {
-                            TextOutput("Please actually write something");
-                            continue;
-                        }
-                        else
-                        {
-                            next = true;
-                            break;
-                        }
-                    }
-                }
-                if (choice.Equals("n") || next)
-                {
-                    next = false;
-                    break;
-                }
-                TextOutput("y or n, please.");
-            }
-            while (true)
-            {
-                Console.WriteLine("Do you want an age? y/n");
-                choice = Console.ReadLine();
-                if (choice.Equals("y"))
-                {
-                    while (true)
-                    {
-                        Console.WriteLine("Please write your age.");
-                        string ageString = Console.ReadLine();
-                        try
-                        {
-                            age = int.Parse(ageString);
-                        }
-                        catch (FormatException e)
-                        {
-                            TextOutput("Please write a number.");
-                            continue;
-                        }
-                        next = true;
-                        break;
-                    }
-                }
-                if (choice.Equals("n") || next)
-                {
-                    next = false;
-                    break;
-                }
-                TextOutput("y or n, please");
-            }
-            while (true)
-            {
-                Console.WriteLine("Do you want an address? y/n");
-                choice = Console.ReadLine();
-                if (choice.Equals("y"))
-                {
-                    while (true)
-                    {
-                        Console.WriteLine("Please write your address.");
-                        address = Console.ReadLine();
-                        if (address.Equals(""))
-                        {
-                            TextOutput("Please actually write something.");
-                            continue;
-                        }
-                        else
-                        {
-                            next = true;
-                            break;
-                        }
-                    }
-                }
-                if (choice.Equals("n") || next)
-                {
-                    next = false;
-                    break;
-                }
-                TextOutput("y or n, please.");
-            }
-            while (true)
-            {
-                Console.WriteLine("Do you want a phone number? y/n");
-                choice = Console.ReadLine();
-                if (choice.Equals("y"))
-                {
-                    while (true)
-                    {
-                        Console.WriteLine("Please write your phone number.");
-                        phoneNumber = Console.ReadLine();
-                        if (phoneNumber.Equals(""))
-                        {
-                            TextOutput("Please actually write something.");
-                            continue;
-                        }
-                        else
-                        {
-                            next = true;
-                            break;
-                        }
-                    }
-                }
-                if (choice.Equals("n") || next)
-                {
-                    break;
-                }
-                TextOutput("y or n, please");
-            }
+            string newPassword;
+            string firstName;
+            string lastName;
+            string email;
+            string age;
+            string address;
+            string phoneNumber;
+
+            newPassword = UserDetailsInput("password");
+            firstName = UserDetailsInput("first name");
+            lastName = UserDetailsInput("last name");
+            email = UserDetailsInput("email");
+            age = UserDetailsInput("age");
+            address = UserDetailsInput("address");
+            phoneNumber = UserDetailsInput("phone number");
 
             Customer newCustomer = new Customer(newUsername, newPassword, firstName, lastName, email, age, address, phoneNumber);
             customers.Add(newCustomer);
             currentCustomer = newCustomer;
             TextOutput($"{newCustomer.Username} successfully added and is now logged in.");
             WaresMenuLoggedIn();
-        } //TO DO!
+        }
         private void SetUserName()
         {
             Console.WriteLine("A keyboard appears.");

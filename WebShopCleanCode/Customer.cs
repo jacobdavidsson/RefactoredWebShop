@@ -13,12 +13,12 @@ namespace WebShopCleanCode
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
-        public int Age { get; set; }
+        public string Age { get; set; }
         public string Address { get; set; }
         public string PhoneNumber { get; set; }
         public int Funds { get; set; }
         public List<Order> Orders { get; set; }
-        public Customer(string username, string password, string firstName, string lastName, string email, int age, string address, string phoneNumber)
+        public Customer(string username, string password, string firstName, string lastName, string email, string age, string address, string phoneNumber)
         {
             Username = username;
             this.password = password;
@@ -66,7 +66,7 @@ namespace WebShopCleanCode
             {
                 Console.Write(", Email: " + Email);
             }
-            if (Age != -1)
+            if (Age != null)
             {
                 Console.Write(", Age: " + Age);
             }
