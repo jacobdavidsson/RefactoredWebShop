@@ -189,7 +189,7 @@ namespace WebShopCleanCode
                     if (currentCustomer != null)
                     {
                         option1 = "See your orders";
-                        option2 = "Set your info";
+                        option2 = "See your info";
                         option3 = "Add funds";
                         option4 = "";
                         amountOfOptions = 3;
